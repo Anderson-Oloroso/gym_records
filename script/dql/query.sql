@@ -129,3 +129,29 @@ SELECT @respuesta AS Resultado;
 
 CALL eliminar_socio(110, @respuesta);
 SELECT @respuesta AS Resultado;
+
+-- ========================================================================
+-- CRUD CIUDADES
+-- ========================================================================
+
+
+DELIMITER //
+CREATE PROCEDURE add_city(IN id_city VARCHAR(10), IN ciudad VARCHAR(100))
+BEGIN
+	-- IF existe
+	IF EXISTS (SELECT * FROM CIUDADES WHERE Ciudad_id = id_city) THEN
+    
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'No se puede agregar esta ciudad, porque ya existe';
+	ELSE
+		
+        INSERT INTO ciudades (Ciudad_ID, Ciudad_Sede)
+			VALUES (id_city, ciudad);
+
+	END IF;
+END//
+
+DELIMITER ;
+
+CALL add_city('C04', 'Sevilla');
+
+SELECT * FROM ciudades;
