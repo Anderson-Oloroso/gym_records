@@ -110,8 +110,6 @@ El sistema maneja las siguientes entidades clave dentro de la base de datos `gym
 
 ## Autor
 - **Nombre del autor:** `Henrik Anderson Oloroso García`
----
 
 ## Última modificación
-
 - **Fecha:** `14/08/2026`
