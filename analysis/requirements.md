@@ -49,14 +49,15 @@ Diseñar e implementar una base de datos relacional robusta en MySQL (`gym_recor
 3. **CASE:** Clasificar a los entrenadores según la cantidad de socios asignados (ej. 'Carga Alta', 'Carga Media', 'Carga Baja') dentro de consultas analíticas.
 4. **MANEJO DE ERRORES (Código Específico):** Capturar excepciones explícitas como la duplicación de claves primarias (`SQLSTATE '23000'` / Error `1062`) durante la inserción de nuevos socios.
 5. **MANEJO DE ERRORES (Transacción):** Asegurar la atomicidad en la asignación de planes mediante `START TRANSACTION`, `COMMIT` y `ROLLBACK` frente a fallos de integridad referencial.
-11. **IF_THEN_ELSE:** Evaluar si un entrenador posee la especialidad requerida para el plan antes de permitir el registro transaccional en `SOCIO_PLAN_ENTRENAMIENTO`.
-12. **LOOP:** Recorrer mediante un cursor la lista de entrenadores para calcular de forma acumulativa su carga de trabajo semanal.
 
 ### 🔍 Consultas Avanzadas y Gestión de Datos
 6. **IN:** Filtrar entrenadores o socios pertenecientes a una lista específica de sedes o especialidades (ej. sedes de 'Zona 10', 'Zona 14', 'Carretera al Salvador').
 7. **INNER JOIN:** Realizar cruces multitabla entre `SOCIOS`, `SOCIO_PLAN_ENTRENAMIENTO`, `PLANES_ENTRENAMIENTO`, `ENTRENADORES` y `SEDES` para obtener el historial consolidado del cliente.
-8. **OUT / 9. INOUT:** Implementar procedimientos almacenados con parámetros de salida (`OUT`) para retornar contadores de socios activos y parámetros mixtos (`INOUT`) para procesar códigos de descuento en inscripciones.
+8. **OUT:** Implementar procedimientos almacenados con parámetros de salida (`OUT`) para retornar contadores de socios activos.
+9. **INOUT:** Implementar parámetros mixtos (`INOUT`) para procesar códigos de descuento en inscripciones.
 10. **Inserción Transaccional:** Módulo seguro de registro de socios y asignación simultánea de plan utilizando variables de sesión SQL.
+11. **IF_THEN_ELSE:** Evaluar si un entrenador posee la especialidad requerida para el plan antes de permitir el registro transaccional en `SOCIO_PLAN_ENTRENAMIENTO`.
+12. **LOOP:** Recorrer mediante un cursor la lista de entrenadores para calcular de forma acumulativa su carga de trabajo semanal.
 13. **Depuración de Consultas Innecesarias:** Optimizar las sentencias SQL eliminando subconsultas redundantes sobre la tabla `CIUDADES` en favor de joins indexados sobre `SEDES`.
 
 ### ⏱️ Eventos y Triggers
