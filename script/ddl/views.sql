@@ -17,3 +17,4 @@ INNER JOIN ENTRENADORES e ON spe.Entrenador_ID = e.Entrenador_ID
 INNER JOIN ESPECIALIDAD_ENTRENADORES ee ON e.Especialidad_ID = ee.Especialidad_ID
 INNER JOIN SEDES se ON spe.Sede_ID = se.Sede_ID
 INNER JOIN CIUDADES c ON se.Ciudad_ID = c.Ciudad_ID;
+
