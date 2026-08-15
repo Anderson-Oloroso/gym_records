@@ -38,6 +38,8 @@ Diseñar e implementar una base de datos relacional robusta en MySQL (`gym_recor
 * **PLANES_ENTRENAMIENTO - SOCIO_PLAN_ENTRENAMIENTO (1:N):** Un plan de entrenamiento puede ser asignado a múltiples socios, pero un registro de asignación referencia un solo plan.
 * **ENTRENADORES - SOCIO_PLAN_ENTRENAMIENTO (1:N):** Un entrenador puede supervisar a múltiples socios en sus planes, pero un registro de asignación especifica a un único entrenador responsable.
 * **SEDES - SOCIO_PLAN_ENTRENAMIENTO (1:N):** Una sede puede ser el escenario de múltiples asignaciones de entrenamiento, pero una asignación se ejecuta en una sola sede.
+* **HISTORIAL_ASIGNACIONES:** Tabla de auditoría e historial analítico particionada por rangos de año para consultar registros antiguos de asignación con alto rendimiento.
+  * *Datos requeridos:* `Historial_ID` (PK), `Anio_Registro` (PK), `Plan_ID`, `Socio_ID`.
 
 ---
 
