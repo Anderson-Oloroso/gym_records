@@ -1,9 +1,6 @@
 USE gym_records;
-
--- PROCEDIMIENTOS ALMACENADOS PARA OPERACIONES CRUD Y LÓGICA DE NEGOCIO
-
--- 1. BUCLE WHILE: Población de datos
 DELIMITER //
+
 CREATE PROCEDURE sp_poblacion_socios_while(IN p_cantidad INT)
 BEGIN
     DECLARE i INT DEFAULT 1;
@@ -13,10 +10,7 @@ BEGIN
         SET i = i + 1;
     END WHILE;
 END //
-DELIMITER ;
 
--- 2. BUCLE REPEAT: Población de especialidades
-DELIMITER //
 CREATE PROCEDURE sp_poblacion_especialidades_repeat(IN p_limite INT)
 BEGIN
     DECLARE i INT DEFAULT 1;
@@ -27,10 +21,7 @@ BEGIN
     UNTIL i > p_limite
     END REPEAT;
 END //
-DELIMITER ;
 
--- 3. BUCLE LOOP: Población de sedes
-DELIMITER //
 CREATE PROCEDURE sp_poblacion_sedes_loop(IN p_limite INT)
 BEGIN
     DECLARE i INT DEFAULT 1;
@@ -41,15 +32,12 @@ BEGIN
         END IF;
 
         INSERT INTO SEDES (Sede_ID, Gimnasio_Sede, Ciudad_ID)
-        VALUES (CONCAT('SED', i), CONCAT('Sede Central ', i), 'CIU1');
+        VALUES (CONCAT('SED', i), CONCAT('Sede Central ', i), 'C01');
 
         SET i = i + 1;
     END LOOP mi_loop;
 END //
-DELIMITER ;
 
--- 4. CONDICIONAL CASE: Categorizar socio
-DELIMITER //
 CREATE PROCEDURE sp_categorizar_socio_case(IN p_socio_id INT, OUT p_categoria VARCHAR(50))
 BEGIN
     DECLARE v_conteo INT DEFAULT 0;
@@ -65,16 +53,8 @@ BEGIN
         ELSE SET p_categoria = 'Socio VIP';
     END CASE;
 END //
-DELIMITER ;
 
--- 5. MANEJO DE ERRORES: Duplicate Key (1062)
-DELIMITER //
-CREATE PROCEDURE sp_insertar_socio_seguro(
-    IN p_id INT,
-    IN p_nombre VARCHAR(50),
-    IN p_apellido VARCHAR(50),
-    IN p_telefono VARCHAR(20)
-)
+CREATE PROCEDURE sp_insertar_socio_seguro(   IN p_id INT, IN p_nombre VARCHAR(50),   IN p_apellido VARCHAR(50),   IN p_telefono VARCHAR(20))
 BEGIN
     DECLARE duplicate_key CONDITION FOR 1062;
     DECLARE CONTINUE HANDLER FOR duplicate_key
@@ -85,17 +65,8 @@ BEGIN
     INSERT INTO SOCIOS (Socio_ID, nombre, apellido, Telefono)
     VALUES (p_id, p_nombre, p_apellido, p_telefono);
 END //
-DELIMITER ;
 
--- 6. MANEJO DE ERRORES EN TRANSACCIÓN
-DELIMITER //
-CREATE PROCEDURE sp_registrar_plan_transaccion(
-    IN p_plan_id INT,
-    IN p_socio_id INT,
-    IN p_plan_entrenamiento_id VARCHAR(10),
-    IN p_entrenador_id VARCHAR(10),
-    IN p_sede_id VARCHAR(10)
-)
+CREATE PROCEDURE sp_registrar_plan_transaccion(   IN p_plan_id INT,   IN p_socio_id INT,   IN p_plan_entrenamiento_id VARCHAR(10),   IN p_entrenador_id VARCHAR(10),   IN p_sede_id VARCHAR(10))
 BEGIN
     DECLARE EXIT HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -111,23 +82,13 @@ BEGIN
     COMMIT;
     SELECT 'Transacción completada exitosamente.' AS EstadoTransaccion;
 END //
-DELIMITER ;
 
--- 7. INSERCIÓN DIRECTA VÍA PROCEDURE
-DELIMITER //
-CREATE PROCEDURE sp_insertar_entrenador(
-    IN p_entrenador_id VARCHAR(10),
-    IN p_nombre VARCHAR(100),
-    IN p_especialidad_id VARCHAR(10)
-)
+CREATE PROCEDURE sp_insertar_entrenador(   IN p_entrenador_id VARCHAR(10),   IN p_nombre VARCHAR(100),   IN p_especialidad_id VARCHAR(10))
 BEGIN
     INSERT INTO ENTRENADORES (Entrenador_ID, Nombre_Entrenador, Especialidad_ID)
     VALUES (p_entrenador_id, p_nombre, p_especialidad_id);
 END //
-DELIMITER ;
 
--- 8. CONDICIONAL IF_THEN_ELSE
-DELIMITER //
 CREATE PROCEDURE sp_evaluar_capacidad_sede(IN p_sede_id VARCHAR(10), OUT p_estado VARCHAR(50))
 BEGIN
     DECLARE v_total INT DEFAULT 0;
@@ -141,10 +102,7 @@ BEGIN
         SET p_estado = 'Sede con baja demanda';
     END IF;
 END //
-DELIMITER ;
 
--- 9. PREPARE, EXECUTE, DEALLOCATE (Sentencias dinámicas)
-DELIMITER //
 CREATE PROCEDURE sp_ejecutar_consulta_dinamica_socio(IN p_socio_id INT)
 BEGIN
     SET @sql = 'SELECT Socio_ID, nombre, apellido, Telefono FROM SOCIOS WHERE Socio_ID = ?';
@@ -154,4 +112,5 @@ BEGIN
     EXECUTE stmt USING @id_param;
     DEALLOCATE PREPARE stmt;
 END //
+
 DELIMITER ;

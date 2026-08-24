@@ -34,10 +34,7 @@ BEGIN
     END IF;
 END //
 
-CREATE PROCEDURE eliminar_socio(
-    IN p_id INT,
-    OUT p_mensaje VARCHAR(120)
-)
+CREATE PROCEDURE eliminar_socio(IN p_id INT, OUT p_mensaje VARCHAR(120))
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM SOCIOS WHERE Socio_ID = p_id) THEN
         SET p_mensaje = 'Error: No existe ningún socio con el ID proporcionado.';
