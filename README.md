@@ -2,7 +2,7 @@
 
 > Este sistema consiste en una solución integral de base de datos relacional desarrollada sobre **MySQL**, diseñada para administrar las operaciones, el personal, los socios y el historial transaccional de una cadena de gimnasios.
 
-> El proyecto abarca desde el modelado físico de datos (DDL) y la inserción de datos (DML) hasta lógica avanzada programada mediante DDL/DML extra (funciones, procedimientos, triggers, eventos, particionamiento) y el control de accesos (DCL).
+> El proyecto abarca desde el modelado físico de datos (DDL) y la inserción de datos (DML) hasta lógica avanzada programada mediante DDL/DML extra (funciones, procedimientos, triggers, eventos) y el control de accesos (DCL).
 
 ---
 
@@ -15,15 +15,15 @@ gym\_records/
 ├── analysis/
 │   └── requirements.md         # Análisis detallado de requerimientos, entidades y reglas de negocio.
 ├── diagrams/
-│   └── wkb\_gym\_records.svg    # Diagrama Entidad-Relación / Modelo Físico en formato SVG.
+│   └── wkb_gym_records.svg    # Diagrama Entidad-Relación / Modelo Físico en formato SVG.
 ├── script/
 │   ├── dcl/
 │   │   └── users.sql           # Creación de usuarios, asignación de roles y privilegios de columna.
 │   ├── ddl/
 │   │   ├── .gitkeep
-│   │   ├── events.sql          # Definición de eventos programados (ej. Reporte diario).
-│   │   ├── functions.sql       # Funciones definidas por el usuario (UDFs, comisión, validaciones).
-│   │   ├── schema.sql          # Creación de la base de datos, tablas relacionales y tabla particionada.
+│   │   ├── events.sql          # Definición de eventos programados.
+│   │   ├── functions.sql       # Funciones definidas por el usuario.
+│   │   ├── schema.sql          # Creación de la base de datos, tablas relacionales.
 │   │   ├── triggers.sql        # Triggers de auditoría y verificación de capacidad/disponibilidad.
 │   │   └── views.sql           # Vistas analíticas y de consulta frecuente.
 │   ├── dml/
@@ -58,7 +58,6 @@ El sistema maneja las siguientes entidades clave dentro de la base de datos `gym
 - **ESPECIALIDAD_ENTRENADORES:** Áreas de dominio del personal técnico.
 - **ENTRENADORES:** Personal de instrucción asignado a una especialidad.
 - **SOCIO_PLAN_ENTRENAMIENTO:** Tabla transaccional central de asignaciones activas.
-- **HISTORIAL_ASIGNACIONES:** Tabla particionada por rangos de año (`PARTITION BY RANGE (Anio_Registro)`) para auditoría e historial masivo de datos.
 
 ---
 
@@ -80,25 +79,15 @@ El sistema maneja las siguientes entidades clave dentro de la base de datos `gym
 - Control previo (`BEFORE INSERT`) para verificar disponibilidad de entrenadores y asegurar restricciones de negocio antes de registrar un plan.
 
 **Eventos Programados:**
-- Eventos diarios (`EVERY 1 DAY`) automatizados para la generación de reportes y consolidación de métricas.
+- Eventos diarios (`EVERY 1 DAY`) automatizados para la alerta de socios que no tienen ningun plan.
 
 ---
 
-### 📐 Funciones Personalizadas (UDF)
+### 📐 Funciones Personalizada
 
 - Cálculo de comisiones para entrenadores.
 - Formateo y validación de datos de socios.
 - Funciones con acceso a datos, lógica condicional `IF-THEN-ELSE` y manejo no determinístico.
-
----
-
-### 📊 Particionamiento y Consultas Dinámicas
-
-**Particionamiento Horizontal:**
-- Optimización de la tabla `HISTORIAL_ASIGNACIONES` por rangos anuales (`p_2023`, `p_2024`, `p_2025`, `p_futuro`).
-
-**Sentencias Dinámicas:**
-- Uso de `PREPARE`, `EXECUTE` y `DEALLOCATE` para la ejecución de consultas compuestas en tiempo de ejecución.
 
 ---
 
