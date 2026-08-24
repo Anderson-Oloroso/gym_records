@@ -1,20 +1,22 @@
 USE gym_records;
 
--- Crear usuario operador
-CREATE USER IF NOT EXISTS 'operador_gym'@'localhost' IDENTIFIED BY 'Opr_GyM-154';
-GRANT SELECT, INSERT, UPDATE ON gym_records.* TO 'operador_gym'@'localhost';
-SHOW GRANTS FOR 'operador_gym'@'localhost';
+ALTER USER 'operador_gym'@'localhost' IDENTIFIED BY 'Opr_GyM-154_v2!';
+GRANT SELECT, INSERT, UPDATE, DELETE ON gym_records.* TO 'operador_gym'@'localhost';
 
--- Crear usuario administrador
-CREATE USER IF NOT EXISTS 'admin_gym'@'localhost' IDENTIFIED BY 'AdminGym2026!';
+ALTER USER 'admin_gym'@'localhost' IDENTIFIED BY 'AdminGym2026_Secure!';
 GRANT ALL PRIVILEGES ON gym_records.* TO 'admin_gym'@'localhost' WITH GRANT OPTION;
 
--- Create usuario auditor
-CREATE USER IF NOT EXISTS 'auditor_sedes'@'localhost' IDENTIFIED BY 'AuditPass456!';
-GRANT SELECT ON gym_records.SEDES TO 'auditor_sedes'@'localhost';
+ALTER USER 'auditor_sedes'@'localhost' IDENTIFIED BY 'AuditPass456_v2!';
+REVOKE ALL PRIVILEGES, GRANT OPTION FROM 'auditor_sedes'@'localhost';
+GRANT SELECT ON gym_records.* TO 'auditor_sedes'@'localhost';
 
--- Crear usuario recepcion
-CREATE USER IF NOT EXISTS 'recepcion_gym'@'localhost' IDENTIFIED BY 'RecepPass';
-GRANT SELECT, UPDATE ON gym_records.SOCIOS TO 'recepcion_gym'@'localhost';
+ALTER USER 'recepcion_gym'@'localhost' IDENTIFIED BY 'RecepPass2026!';
+GRANT SELECT, INSERT, UPDATE ON gym_records.SOCIOS TO 'recepcion_gym'@'localhost';
+GRANT SELECT, INSERT, UPDATE ON gym_records.SOCIO_PLAN_ENTRENAMIENTO TO 'recepcion_gym'@'localhost';
 
 FLUSH PRIVILEGES;
+
+SHOW GRANTS FOR 'operador_gym'@'localhost';
+SHOW GRANTS FOR 'admin_gym'@'localhost';
+SHOW GRANTS FOR 'auditor_sedes'@'localhost';
+SHOW GRANTS FOR 'recepcion_gym'@'localhost';

@@ -1,18 +1,21 @@
 USE gym_records;
 
--- Activar Event Scheduler
-SET GLOBAL event_scheduler = ON;
+DROP EVENT IF EXISTS evt_alerta_socios_sin_plan;
 
--- EVENTO: Reporte diario - Cantidad de socios por entrenador
-CREATE EVENT IF NOT EXISTS evt_reporte_diario_socios_entrenador
+DELIMITER $$
+
+CREATE EVENT evt_alerta_socios_sin_plan
 ON SCHEDULE EVERY 1 DAY
-STARTS (CURRENT_DATE + INTERVAL 1 DAY + INTERVAL 23 HOUR)
+STARTS (CURRENT_DATE + INTERVAL 1 DAY + INTERVAL 8 HOUR)
 DO
+BEGIN
     SELECT 
-        NOW() AS Fecha_Calculo,
-        e.Entrenador_ID,
-        e.Nombre_Entrenador,
-        COUNT(spe.Socio_ID) AS Total_Socios_Asignados
-    FROM ENTRENADORES e
-    LEFT JOIN SOCIO_PLAN_ENTRENAMIENTO spe ON e.Entrenador_ID = spe.Entrenador_ID
-    GROUP BY e.Entrenador_ID, e.Nombre_Entrenador;
+        s.Socio_ID,
+        CONCAT(s.nombre, ' ', s.apellido) AS Nombre_Completo,
+        s.Telefono
+    FROM SOCIOS s
+    LEFT JOIN SOCIO_PLAN_ENTRENAMIENTO spe ON s.Socio_ID = spe.Socio_ID
+    WHERE spe.Plan_ID IS NULL;
+END$$
+
+DELIMITER ;
